@@ -183,6 +183,45 @@ def portfolio_summary(
     }
 
 
+@router.get("/allocation")
+def portfolio_allocation(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+
+    user = (
+        db.query(User)
+        .filter(User.email == current_user["email"])
+        .first()
+    )
+
+    stocks = (
+        db.query(Portfolio)
+        .filter(Portfolio.user_id == user.id)
+        .all()
+    )
+
+    allocation = []
+
+    for stock in stocks:
+
+        current_price = get_current_price(
+            stock.symbol
+        )
+
+        value = (
+            stock.quantity *
+            current_price
+        )
+
+        allocation.append({
+            "name": stock.symbol,
+            "value": round(value, 2)
+        })
+
+    return allocation
+
+
 @router.delete("/{stock_id}")
 def delete_stock(
     stock_id: int,

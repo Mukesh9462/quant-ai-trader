@@ -5,6 +5,7 @@ from app.api.auth import router as auth_router
 from app.api.portfolio import router as portfolio_router
 from app.api.market import router as market_router
 from app.api.trade import router as trade_router
+from app.api.watchlist import router as watchlist_router
 
 app = FastAPI(
     title="Quant AI Trader",
@@ -46,6 +47,13 @@ app.include_router(
     trade_router,
     prefix="/trade",
     tags=["Trade Simulator"]
+)
+
+# Watchlist Routes
+app.include_router(
+    watchlist_router,
+    prefix="/watchlist",
+    tags=["Watchlist"]
 )
 
 @app.get("/")

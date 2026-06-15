@@ -12,17 +12,24 @@ def get_current_user(
     token: str = Depends(oauth2_scheme)
 ):
 
-    print("TOKEN RECEIVED:", token)
+    print("GET_CURRENT_USER CALLED")
+    print("=" * 50)
+    print("TOKEN RECEIVED:")
+    print(token)
 
     payload = verify_token(token)
 
-    print("PAYLOAD:", payload)
+    print("PAYLOAD:")
+    print(payload)
+    print("=" * 50)
 
     if payload is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid Token",
-            headers={"WWW-Authenticate": "Bearer"}
+            headers={
+                "WWW-Authenticate": "Bearer"
+            }
         )
 
     return payload

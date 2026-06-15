@@ -7,6 +7,8 @@ import {
   deleteStock,
 } from "../services/api";
 
+import PortfolioCharts from "../components/PortfolioCharts";
+
 function Portfolio() {
   const [stocks, setStocks] = useState([]);
   const [summary, setSummary] = useState(null);
@@ -22,12 +24,27 @@ function Portfolio() {
   const loadPortfolio = async () => {
     try {
       const perf = await getPortfolioPerformance();
+
+      console.log(
+        "PERFORMANCE DATA:",
+        perf.data
+      );
+
       const sum = await getPortfolioSummary();
+
+      console.log(
+        "SUMMARY DATA:",
+        sum.data
+      );
 
       setStocks(perf.data);
       setSummary(sum.data);
+
     } catch (error) {
-      console.error(error);
+      console.error(
+        "PORTFOLIO ERROR:",
+        error
+      );
     }
   };
 
@@ -60,20 +77,27 @@ function Portfolio() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8">
+
       <h1 className="text-4xl font-bold mb-8">
         Portfolio Dashboard
       </h1>
 
+      {/* Add Stock */}
+
       <div className="bg-slate-800 p-6 rounded-xl mb-8">
+
         <h2 className="text-2xl mb-4">
           Add Stock
         </h2>
 
         <div className="grid md:grid-cols-4 gap-4">
+
           <input
             placeholder="Symbol"
             value={symbol}
-            onChange={(e) => setSymbol(e.target.value)}
+            onChange={(e) =>
+              setSymbol(e.target.value)
+            }
             className="bg-slate-700 p-3 rounded"
           />
 
@@ -81,7 +105,9 @@ function Portfolio() {
             placeholder="Quantity"
             type="number"
             value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) =>
+              setQuantity(e.target.value)
+            }
             className="bg-slate-700 p-3 rounded"
           />
 
@@ -89,7 +115,9 @@ function Portfolio() {
             placeholder="Buy Price"
             type="number"
             value={buyPrice}
-            onChange={(e) => setBuyPrice(e.target.value)}
+            onChange={(e) =>
+              setBuyPrice(e.target.value)
+            }
             className="bg-slate-700 p-3 rounded"
           />
 
@@ -99,11 +127,17 @@ function Portfolio() {
           >
             Add Stock
           </button>
+
         </div>
+
       </div>
 
+      {/* Summary */}
+
       {summary && (
+
         <div className="grid md:grid-cols-4 gap-4 mb-8">
+
           <div className="bg-slate-800 p-4 rounded-xl">
             <h3>Total Investment</h3>
             <p className="text-2xl mt-2">
@@ -131,16 +165,23 @@ function Portfolio() {
               {summary.total_profit_percent}%
             </p>
           </div>
+
         </div>
+
       )}
 
+      {/* Holdings */}
+
       <div className="bg-slate-800 rounded-xl p-6">
+
         <h2 className="text-2xl mb-4">
           Holdings
         </h2>
 
         <table className="w-full">
+
           <thead>
+
             <tr className="border-b border-slate-600">
               <th className="p-3">Symbol</th>
               <th className="p-3">Qty</th>
@@ -149,21 +190,40 @@ function Portfolio() {
               <th className="p-3">P/L</th>
               <th className="p-3">Action</th>
             </tr>
+
           </thead>
 
           <tbody>
+
             {stocks.map((stock, index) => (
+
               <tr
                 key={index}
                 className="border-b border-slate-700"
               >
-                <td className="p-3">{stock.symbol}</td>
-                <td className="p-3">{stock.quantity}</td>
-                <td className="p-3">{stock.buy_price}</td>
-                <td className="p-3">{stock.current_price}</td>
-                <td className="p-3">{stock.profit_loss}</td>
 
                 <td className="p-3">
+                  {stock.symbol}
+                </td>
+
+                <td className="p-3">
+                  {stock.quantity}
+                </td>
+
+                <td className="p-3">
+                  {stock.buy_price}
+                </td>
+
+                <td className="p-3">
+                  {stock.current_price}
+                </td>
+
+                <td className="p-3">
+                  {stock.profit_loss}
+                </td>
+
+                <td className="p-3">
+
                   <button
                     onClick={() =>
                       handleDelete(stock.id)
@@ -172,14 +232,26 @@ function Portfolio() {
                   >
                     Delete
                   </button>
+
                 </td>
+
               </tr>
+
             ))}
+
           </tbody>
+
         </table>
+
       </div>
+
+      {/* Portfolio Analytics */}
+
+      <PortfolioCharts />
+
     </div>
   );
 }
 
 export default Portfolio;
+

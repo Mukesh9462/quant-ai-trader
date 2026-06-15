@@ -18,28 +18,54 @@ def create_access_token(data: dict):
         {"exp": expire}
     )
 
-    return jwt.encode(
+    token = jwt.encode(
         to_encode,
         SECRET_KEY,
         algorithm=ALGORITHM
     )
 
+    print("=" * 50)
+    print("TOKEN CREATED:")
+    print(token)
+    print("=" * 50)
+
+    return token
+
 
 def verify_token(token: str):
 
+    print("=" * 50)
+    print("TOKEN TO VERIFY:")
+    print(token)
+
     try:
+
         payload = jwt.decode(
             token,
             SECRET_KEY,
             algorithms=[ALGORITHM]
         )
 
+        print("DECODED PAYLOAD:")
+        print(payload)
+        print("=" * 50)
+
         return payload
 
     except JWTError as e:
-        print(f"JWT Verification Failed: {e}")
+
+        print("=" * 50)
+        print("JWT ERROR:")
+        print(str(e))
+        print("=" * 50)
+
         return None
 
     except Exception as e:
-        print(f"Unexpected Error: {e}")
+
+        print("=" * 50)
+        print("UNEXPECTED ERROR:")
+        print(str(e))
+        print("=" * 50)
+
         return None
