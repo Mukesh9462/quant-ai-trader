@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: "https://quant-ai-trader.onrender.com",
 });
 
 // Attach JWT token automatically
